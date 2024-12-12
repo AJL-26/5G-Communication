@@ -1,0 +1,108 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset
+df = pd.read_csv("4G_5G_6G_network_metrics.csv")
+
+# Set the style for seaborn
+sns.set(style="whitegrid")
+
+# Throughput comparison (Uplink and Downlink)
+plt.figure(figsize=(12, 6))
+sns.barplot(data=df, x="Generation", y="Throughput (Uplink)", hue="Scenario")
+plt.title("Uplink Throughput Comparison")
+plt.ylabel("Throughput (Mbps)")
+plt.xlabel("Network Generation")
+plt.legend(title="Scenario")
+plt.show()
+
+plt.figure(figsize=(12, 6))
+sns.barplot(data=df, x="Generation", y="Throughput (Downlink)", hue="Scenario")
+plt.title("Downlink Throughput Comparison")
+plt.ylabel("Throughput (Mbps)")
+plt.xlabel("Network Generation")
+plt.legend(title="Scenario")
+plt.show()
+
+# Latency comparison
+plt.figure(figsize=(12, 6))
+sns.boxplot(data=df, x="Generation", y="Latency (ms)", hue="Scenario")
+plt.title("Latency Comparison")
+plt.ylabel("Latency (ms)")
+plt.xlabel("Network Generation")
+plt.legend(title="Scenario")
+plt.show()
+
+# Energy consumption comparison
+plt.figure(figsize=(12, 6))
+sns.barplot(data=df, x="Generation", y="Energy Consumption (J/MB)", hue="Scenario")
+plt.title("Energy Consumption Comparison")
+plt.ylabel("Energy Consumption (J/MB)")
+plt.xlabel("Network Generation")
+plt.legend(title="Scenario")
+plt.show()
+
+# Packet loss comparison
+plt.figure(figsize=(12, 6))
+sns.barplot(data=df, x="Generation", y="Packet Loss (%)", hue="Scenario")
+plt.title("Packet Loss Comparison")
+plt.ylabel("Packet Loss (%)")
+plt.xlabel("Network Generation")
+plt.legend(title="Scenario")
+plt.show()
+
+# Pie chart for packet loss (average values per generation)
+pie_data = df.groupby("Generation")["Packet Loss (%)"].mean()
+plt.figure(figsize=(8, 8))
+pie_data.plot(kind="pie", autopct="%1.1f%%", startangle=90, cmap="Set3")
+plt.title("Average Packet Loss by Network Generation")
+plt.ylabel("")  # Hides the y-label for aesthetics
+plt.show()
+
+# Pairplot for pairwise relationships
+sns.pairplot(df, hue="Generation", diag_kind="kde")
+plt.suptitle("Pairwise Relationships", y=1.02)
+plt.show()
+
+# Heatmap for correlation matrix
+plt.figure(figsize=(10, 8))
+correlation = df.drop(columns=["Scenario", "Generation"]).corr()
+sns.heatmap(correlation, annot=True, cmap="coolwarm", fmt=".2f")
+plt.title("Correlation Matrix")
+plt.show()
+
+# Line plot for throughput trends (Uplink and Downlink)
+plt.figure(figsize=(12, 6))
+sns.lineplot(data=df, x="Scenario", y="Throughput (Uplink)", hue="Generation", marker="o")
+plt.title("Uplink Throughput Trends")
+plt.ylabel("Throughput (Mbps)")
+plt.xlabel("Scenario")
+plt.legend(title="Generation")
+plt.show()
+
+plt.figure(figsize=(12, 6))
+sns.lineplot(data=df, x="Scenario", y="Throughput (Downlink)", hue="Generation", marker="o")
+plt.title("Downlink Throughput Trends")
+plt.ylabel("Throughput (Mbps)")
+plt.xlabel("Scenario")
+plt.legend(title="Generation")
+plt.show()
+
+# Scatter plot for energy consumption vs throughput (Uplink)
+plt.figure(figsize=(12, 6))
+sns.scatterplot(data=df, x="Throughput (Uplink)", y="Energy Consumption (J/MB)", hue="Generation", style="Scenario", s=100)
+plt.title("Energy Consumption vs Uplink Throughput")
+plt.ylabel("Energy Consumption (J/MB)")
+plt.xlabel("Throughput (Uplink) (Mbps)")
+plt.legend(title="Generation")
+plt.show()
+
+# Scatter plot for latency vs throughput (Downlink)
+plt.figure(figsize=(12, 6))
+sns.scatterplot(data=df, x="Throughput (Downlink)", y="Latency (ms)", hue="Generation", style="Scenario", s=100)
+plt.title("Latency vs Downlink Throughput")
+plt.ylabel("Latency (ms)")
+plt.xlabel("Throughput (Downlink) (Mbps)")
+plt.legend(title="Generation")
+plt.show()
